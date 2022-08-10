@@ -85,7 +85,9 @@ while True:
             # show current room & item
             show_travel()
 
-            if 'item' in rooms[room]:
+            if 'item' not in rooms[room]:
+                pass
+            else:
                 # print item if not collected yet
                 print('You see', rooms[room]['item'])
                 print('-' * 20)
