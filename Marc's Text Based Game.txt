@@ -2,6 +2,7 @@
 
 # A dictionary linking a room to other rooms
 # linking one item for each room except the Start room (Council Room) and the room containing the villain
+
 rooms = {
     'The Council Room': {'north': 'Supply Room', 'south': 'Locker Room',
                          'east': 'Radio Room', 'west': 'Fire Pit'},
@@ -28,9 +29,8 @@ rooms = {
                          'text': 'you are in the Storage Room'}  # villain
 }
 
-
+# print a main menu and the comma
 def show_instructions():
-    # print a main menu and the commands
     print('-' * 20)
     print("Zombie Text Adventure Game\n"
           "Collect 6 items to win the game, or be eaten by the Zombie.\n"
@@ -40,6 +40,7 @@ def show_instructions():
 
 
 # assign inventory to empty list and current room to Council Room
+
 inventory = []
 current_room = 'The Council Room'
 current_item = ''
@@ -67,22 +68,34 @@ show_instructions()
 show_status()
 
 # gameplay loop / while loop
+
 while True:
+
     # get move from player
+    
     command = input('\nWhat do you do? ').split()
     print('-' * 20)
 
     room = current_room
 
     # while statement if go is true
+    
     if command[0] == 'go':
+    
         # assign direction to second half of move
+        
         direction = (command[1]).capitalize()
+        
         # if statement to determine if direction is in room dictionary
+        
         if direction in rooms[current_room]:
+        
             # assign new room to value in dictionary
+            
             room = rooms[room][(player_move[1]).capitalize()]
+            
             # show current room & item
+            
             show_travel()
 
             if 'item' not in rooms[room]:
