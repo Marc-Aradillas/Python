@@ -1,152 +1,92 @@
 # Marc Anthony Aradillas
 
-# A dictionary linking a room to other rooms
-# linking one item for each room except the Start room (Council Room) and the room containing the villain
+# Sample function showing the goal of the game and move commands
+def show_instructions():
+    # print a main menu and the commands
+    print("Zombie Text Adventure Game")
+    print("Collect 6 items to win the game, or be eaten by the Zombie.")
+    print("Move commands: go South, go North, go East, go West")
+    print("Add to Inventory: get 'item name'")
 
-rooms = {
-    'The Council Room': {'north': 'Supply Room', 'south': 'Locker Room',
-                         'east': 'Radio Room', 'west': 'Fire Pit'},
 
-    'The Radio Room': {'west': 'Council Room', 'item': 'Flare',
-                       'north': 'Armory', 'text': 'you are in the Radio Room'},
-
-    'The Supply Room': {'south': 'Council Room', 'east': 'Storage Room',
-                        'item': 'Flash Light', 'text': 'you are in the Supply Room'},
-
-    'The Armory': {'south': 'Radio Room', 'item': 'Riot Shield',
-                   'text': 'you are in the Armory'},
-
-    'The Fire Pit': {'east': 'Council Room', 'item': 'Grilled Corn',
-                     'text': 'you are at the Fire Pit'},
-
-    'The Locker Room': {'north': 'Council Room', 'east': 'Tent',
-                        'item': 'Baseball Bat', 'text': 'you are in the Locker Room'},
-
-    'The Tent': {'west': 'Locker Room', 'item': 'Four Leaf Clover',
-                 'text': 'you are in the Tent'},
-
-    'The Storage Room': {'west': 'Supply Room', 'item': 'Zombie',
-                         'text': 'you are in the Storage Room'}  # villain
+# Define the items dictionary
+items = {
+    'Flash Light': {'name': 'Flash Light'},
+    'Flare': {'name': 'Flare'}
 }
 
-# print a main menu and the comma
-def show_instructions():
-    print('-' * 20)
-    print("Zombie Text Adventure Game\n"
-          "Collect 6 items to win the game, or be eaten by the Zombie.\n"
-          "Move commands: go south, go north, go east, go west\n"
-          "Add to Inventory: get 'item name'\n")
-    print('-' * 20)
+# Define the rooms dictionary
+rooms = {
+    'Supply Room': {'name': 'The Supply Room', 'south': 'Council Room', 'east': 'Storage Room',
+                    'item': 'Flash Light', 'text': 'you are in the Supply Room'},
 
+    'Council Room': {'name': 'The Council Room', 'north': 'Supply Room', 'south': 'Locker Room',
+                     'east': 'Radio Room', 'west': 'Fire Pit', 'text': 'you are in the Council Room'},
 
-# assign inventory to empty list and current room to Council Room
+    'Radio Room': {'name': 'The Radio Room', 'west': 'Council Room', 'north': 'Armory',
+                   'item': 'Flare', 'text': 'you are in the Radio Room'},
 
+    'Armory': {'name': 'The Armory', 'south': 'Radio Room', 'text': 'you are in the Armory'},
+
+    'Fire Pit': {'name': 'The Fire Pit', 'east': 'Council Room',
+                 'text': 'you are at the Fire Pit'},
+
+    'Locker Room': {'name': 'The Locker Room', 'north': 'Council Room', 'east': 'Tent',
+                    'text': 'you are in the Locker Room'},
+
+    'Tent': {'name': 'The Tent', 'west': 'Locker Room',
+             'text': 'you are in the Tent'},
+
+    'Storage Room': {'name': 'The Storage Room', 'west': 'Supply Room',
+                     'text': 'you are in the Storage Room'}
+}
+
+# Define the list of valid directions
+directions = ['north', 'south', 'east', 'west']
+
+# Initialize the current room and inventory
+current_room = rooms['Council Room']
 inventory = []
-current_room = 'The Council Room'
-current_item = ''
-player_move = ['north', 'south', 'east', 'west']
 
-
-def show_status():
-    print('You are in', current_room)
-    print('Gathered Items:', inventory)
-    print("-" * 20)
-
-
-def show_travel():
-    print('you have traveled to', current_room)
-    print('Gathered Items:', inventory)
-    print("-" * 20)
-
-
-def main():
-    pass
-
-
-show_instructions()
-
-show_status()
-
-# gameplay loop / while loop
-
+# Game loop
 while True:
+    # Check if the player has won the game
+    if current_room['name'] == 'The Storage Room' and len(inventory) == 2:
+        print('Congratulations! You have reached the Storage Room and collected all items!')
+        break
 
-    # get move from player
-    
-    command = input('\nWhat do you do? ').split()
-    print('-' * 20)
+    # Print the current room and prompt the user for input
+    print(current_room['text'])
+    command = input('\nWhat do you do? ').strip().lower()
 
-    room = current_room
-
-    # while statement if go is true
-    
-    if command[0] == 'go':
-    
-        # assign direction to second half of move
-        
-        direction = (command[1]).capitalize()
-        
-        # if statement to determine if direction is in room dictionary
-        
-        if direction in rooms[current_room]:
-        
-            # assign new room to value in dictionary
-            
-            room = rooms[room][(player_move[1]).capitalize()]
-            
-            # show current room & item
-            
-            show_travel()
-
-            if 'item' not in rooms[room]:
-                pass
-            else:
-                # print item if not collected yet
-                print('You see', rooms[room]['item'])
-                print('-' * 20)
-
-            if room == 'The Storage Room':
-                # winning statement
-                if len(inventory) == 7:
-                    print('Congratulations! you have reached the Storage Room and eliminated the Zombie!')
-                    exit()
-
-                # losing statement
-                elif len(inventory) != 7:
-                    print('You have not gathered enough items!'
-                          '\nThe Zombie bit you. bye bye!')
-                    exit()
-
-            player_move = input('\nWhat do you do? ').split()
-            print('-' * 20)
-
+    # Parse the input and execute the corresponding action
+    if command in directions:
+        # If the input is a valid direction, check if there is a room in that direction
+        if command in current_room:
+            current_room = rooms[current_room[command]]
         else:
-            print('You cannot travel this way!')
-            print('-' * 20)
-            player_move = input('\nWhich direction are you trying to go? ').split()
-            print('-' * 20)
-
-    elif player_move[0] == 'get':
-        # assign item name to second half of move
-        item_name = (player_move[1]).capitalize()
-
-        # if statement to determine if item name is in room dictionary
-        if item_name in rooms[room]['item']:
-            # add item name to inventory
-            inventory.append(item_name)
-            del rooms[room]['item']
-            print('Great! you gathered', item_name)
-            print('-' * 20)
-            player_move = input('\nWhat do you do? ').split()
-            print('-' * 20)
+            print('You cannot go that way.')
+    elif command.startswith('get '):
+        # If the input starts with "get ", try to pick up the specified item
+        item_name = command[4:]
+        if 'item' in current_room and current_room['item'] == item_name:
+            # If the item is in the room, pick it up and add it to the inventory
+            inventory.append(items[item_name])
+            current_room.pop('item')
+            print(f"You picked up the {item_name}.")
         else:
-            print('Please enter a valid command.')
-            player_move = input('\nWhat do you do? ').split()
-            print('-' * 20)
-
+            print("That item is not here.")
+    elif command == 'inventory':
+        # Print the contents of the inventory
+        if len(inventory) == 0:
+            print("Your inventory is empty.")
+        else:
+            print("Inventory:")
+            for item in inventory:
+                print(item['name'])
+    elif command == 'help':
+        # Show the game instructions
+        show_instructions()
     else:
-        print('Please enter a valid command.')
-        player_move = input('\nWhat do you do? ').split()
-        print('-' * 20)
-
-main()
+        # If the input is not recognized, print an error message
+        print('Command not recognized.')
