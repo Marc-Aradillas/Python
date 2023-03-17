@@ -1,4 +1,8 @@
 # Marc Anthony Aradillas
+# LAST EDITED 14 MARCH
+# game loop completed test of iterations
+# TO DO: need to correct item collection from each room and concatenate item string objects into dictionaries within each room for
+# each respective item.
 
 # Sample function showing the goal of the game and move commands
 def show_instructions():
